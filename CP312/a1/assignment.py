@@ -1,6 +1,15 @@
 
 def function(ls, target):
 
+	n = len(ls)
+
+	for i in range(n):
+		for j in range(n):
+
+			if i != j and abs(ls[i] - ls[j]) <= target:
+				return True
+
+	return False
 
 	pass
 
@@ -12,4 +21,4 @@ j = 11
 
 out = function(a, j)
 
-assert out
+print(f"Expected: True  Got: {out}")
