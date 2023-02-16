@@ -1,0 +1,19 @@
+def binary_search(list, left, right, target):
+
+    if left > right Do
+        return -1
+    
+        middle = floor((left + right) / 2 )
+
+        if target == list[middle] Do 
+            return middle
+        
+        else if target < list[middle] Do    
+            return binary_search(list, left, middle-1, target)
+        
+        else:
+            return binary_search(ls, middle+1, right, target)
+        
+def two_way_two_sum(list1, list2):
+    pass
+    

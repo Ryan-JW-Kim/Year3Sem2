@@ -1,0 +1,11 @@
+def find_max(list, left, right):
+    middle = floor((left + right) / 2)
+
+    if list[middle-1] < list[middle] Do
+        return find_max(list, middle+1, right)
+    
+    else if  list[middle+1] > list[middle] Do   
+        return find_max(ls, left, middle-1)
+    
+    else if list[middle] == list[middle+1] or list[middle] == list[middle-1] Do
+        return middle

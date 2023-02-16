@@ -1,0 +1,11 @@
+def end_of_left_segment(list, left, right):
+    if list[right] > list[right-1] Do   
+        return right
+    
+    middle = floor((left + right) / 2)
+
+    if list[middle] < list[right] Do
+        return find_end_of_left_segment(list, middle, right)
+    
+    else if list[left] < list[middle]:
+        return find_end_of_left_segment(list, left, middle)
