@@ -1,7 +1,7 @@
 def question_two_solution(list):
     index = find_max(list, 0, n-1)
 
-    p = find_end_of_left_segment(list, 0, index)
-    q = find_end_of_right_segment(list,index, n-1)
+    p = end_of_left_segment(list, 0, index)
+    q = start_of_right_segment(list,index, n-1)
 
     return (p+1, q+1)

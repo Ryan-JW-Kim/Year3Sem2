@@ -9,3 +9,4 @@ def find_max(list, left, right):
     
     else if list[middle] == list[middle+1] or list[middle] == list[middle-1] Do
         return middle
+        
