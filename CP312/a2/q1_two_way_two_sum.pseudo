@@ -3,14 +3,14 @@ def two_way_two_sum(list1, list2):
     sums_list1 = []
     sums_list2 = []
 
-    for i to n Do
-        for j to n Do
+    for i=1 to n-1 Do
+        for j=0 to n-1 Do
             sums_list1.appned(list1[i] + list1[j])
             sums_list2.appned(list2[i] + list2[j])
 
     sums_list2.sort()
 
-    for i to n^2-1 Do
+    for i=0 to n^2-1 Do
         if binary_search(sums_list2, n^2-1, sums_list1[i]) Do
             return True
 
