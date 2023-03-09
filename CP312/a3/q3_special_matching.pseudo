@@ -1,0 +1,11 @@
+def special_matching(A, B):
+
+    sort(A);
+    sort(B);
+
+    results = [];
+
+    for i=1 to n Do
+        results.append([A[i], B[i]]);
+    
+    return results;

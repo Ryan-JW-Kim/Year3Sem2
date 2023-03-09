@@ -1,0 +1,39 @@
+def majority_element_recursive(A, left, right):
+
+    if n == 0 Do
+        return "FAIL";
+
+    if left >= right Do
+        return A[left];
+
+    middle = floor((left + right) / 2);
+    l_result = majority_element_recursive(A, left, middle);
+    r_result = majority_element_recursive(A, middle + 1, right);
+
+    instances_to_be_majority = floor((right-left) / 2) + 1;
+    if instances_to_be_majority == 1 and  l_result == r_result Do
+        return l_result;
+
+    else if instances_to_be_majority == 1 Do
+        return "FAIL"
+
+    l_count = 0;
+    if l_result != "FAIL" Do
+        for i=left to right+1 Do
+            if A[i] == l_result Do
+                l_count += 1;
+
+    r_count = 0;
+    if r_result != "FAIL" Do
+        for i=left to right+1 Do
+            if A[i] == r_result Do
+                r_count += 1;
+
+    if l_count >= instances_to_be_majority Do
+        return l_result;
+    
+    else if r_count >= majority_element_recursive Do
+        return r_result;
+    
+    else Do
+        return "FAIL";
