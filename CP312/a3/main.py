@@ -22,19 +22,82 @@ def q1(citations):
 
     return middle if citations[middle] != 0 else -1
 
-def q2():
+def q2(ls):
     
-    def func(ls, start, end, counter):
+    def recur(ls, left, right):
 
-        if (end-start) > 1:
-            
-            middle = (left + right) // 2
-
-            temp_left = func(ls, start, middle, counter)
-            temp_right = func(ls, middle, end, counter)
+        # Base Case of single element subarray
+        if left == right:
+            return [[ls[left], 1]]
         
+        middle = (left + right) // 2
+
+        # Consider both left and right sides of subarray
+        left_result = recur(ls, left, middle)
+        right_result = recur(ls, middle, right)
+        
+        # Find max instance of majority elem in left subarray
+        L = 0
+        for i in range(len(left_result)):
+            if left_result[i][1] > left_result[L][1]:
+                L = i
+            
+        # Find max instance of majority elem in right subarray
+        R = 0
+        for i in range(len(right_result)):
+            if right_result[i][1] > right_result[R][1]:
+                R = i
+        
+        # Found max instances of same GIF object on left and right sides
+        if left_result[L][0] == right_result[R][0]:
+            
+            # Combine the counts found in both sides
+            left_result[L][1] += right_result[R][1]
+            return [left_result[L]]
+        
+        # Max Instace of both sides is left and we want to combine the count from right and return to a higher level 
+        elif left_result[L][1] > right_result[R][1]:
+
+            for i in range(len(right_result)):
+                if right_result[i][0] == left_result[L][0]:
+                    left_result[L][1] += right_result[i][1]
+                    break
+            
+            return [left_result[L]]
+        
+        # Max Instance of both sides is right and we want to combine the count from left and return to a higher level
+        elif left_result[L][1] < right_result[R][1]:
+
+            for i in range(len(left_result)):
+                if left_result[i][0] == right_result[R][0]:
+                    right_result[R][1] += left_result[i][1]
+                    break
+            
+            return [right_result[R]]
+
+        # Max instances are different GIF objects but have the same occurence, therefore algo cant decide which is max at this layer
         else:
-            return 
+
+            # Combine instance count from right into left 
+            for i in range(len(right_result)):
+                if right_result[i][0] == left_result[L][0]:
+                    left_result[L][1] += right_result[i][1]
+                    break 
+            
+            # Combine instnace count from left into right
+            for i in range(len(left_result)):
+                if left_result[i][0] == right_result[R][0]:
+                    right_result[R][1] += left_result[i][1]
+                    break
+
+            return [right_result[R], left_result[L]]
+
+    potentials = recur(ls, 0, len(ls)-1) 
+
+    if len(potentials) != 1:
+        return "FAIL"
+    
+    return str(potentials[0][0])
 
 def q3():
     pass
@@ -77,6 +140,6 @@ def test_q3():
     A = q3(C1, C2)
     print(A)
     
-test_q1()
-# test_q2()
+# test_q1()
+test_q2()
 # test_q3()
