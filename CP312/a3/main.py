@@ -1,3 +1,5 @@
+import sys
+
 def q1(citations):
 
     n = len(citations)
@@ -74,8 +76,17 @@ def q2(ls):
     result = recur1(ls, 0, len(ls)-1) 
     return result
 
-def q3():
-    pass
+def q3(A, B):
+    
+    A.sort()
+    B.sort()
+
+    result = []
+
+    for i in range(len(A)):
+        result.append((A[i], B[i]))
+
+    return result
 
 def test_q1():
 
@@ -124,13 +135,67 @@ def test_q2():
     expect = "E"
     assert result == expect, f"Expected {expect} got {result}"
 
+def test_q3_summation(pairs, b=None):
+
+    sum = 0
+
+    if b == None:
+        for (p1, p2) in pairs:
+            # print(f"Ai:{p1} + Bi:{p2} ---- ({(p1-p2)**2})")
+            sum += (p1 - p2)**2
+    
+    else:
+        for i in range(len(pairs)):
+            sum += (pairs[i] - b[i])**2
+    return sum
+
+def test_q3_minimized(A, B):
+
+    import itertools
+    possible_A = list(itertools.permutations(A))
+    possible_B = list(itertools.permutations(B))
+
+    all_sums = []
+    for A in possible_A:
+        for B in possible_B:
+            A, B = list(A), list(B)
+            summation = test_q3_summation(A, B)
+
+            all_sums.append(summation)
+
+    minimal = min(all_sums)
+
+    for A in possible_A:
+        for B in possible_B:
+            A, B = list(A), list(B)
+            summation = test_q3_summation(A, B)
+
+            if summation == minimal:
+
+                pairs = []
+                for i in range(len(A)):
+                    pairs.append((A[i], B[i]))
+
+                d = {'Sum': summation,
+                     "A": A,
+                     'B': B,
+                     'P': pairs}
+                
+                return d
 
 def test_q3():
     C1 = [1, 2, 3, 4, 5, 6]
     C2 = [2, 3, 4, 1, 2, 4]
-    A = q3(C1, C2)
-    print(A)
+    pairs = q3(C1, C2)
+    sum = test_q3_summation(pairs)
+    
+    print(f"Result: {sum}\nGiven Pairs:{pairs}")
+
+    result_dict = test_q3_minimized(C1, C2)
+
+    print(f"R:{pairs}")
+    print(f"I:{result_dict['P']}")
     
 # test_q1()
-test_q2()
-# test_q3()
+# test_q2()
+test_q3()
