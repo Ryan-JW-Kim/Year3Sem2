@@ -88,6 +88,32 @@ def q3(A, B):
 
     return result
 
+def q2_fastest(ls):
+
+    majority = None
+    count = 0
+
+    for elem in ls:
+        if majority == None:
+            majority = elem
+
+        else:
+            if majority == elem:
+                count += 1
+            
+            else:
+                count -= 1
+
+                if count <= 0:
+                    majority = elem
+
+    if count == 0:
+        result = "FAIL"
+    else:
+        result = majority
+
+    return result
+
 def test_q1():
 
     C = [17, 17, 12, 10, 7, 4, 2, 2, 1, 1, 1]
@@ -118,6 +144,7 @@ def test_q2():
 
     A = ['a', '2', '2', 'c', 'v', '2', '2']
     result = q2(A)
+    result = q2_fastest(A)
     assert result == '2', f"Expected: 2 got {result}"
 
     A = []
@@ -197,5 +224,5 @@ def test_q3():
     print(f"I:{result_dict['P']}")
     
 # test_q1()
-# test_q2()
-test_q3()
+test_q2()
+# test_q3()
