@@ -11,6 +11,8 @@ def q1(citations):
 
         middle = (left+right) // 2
 
+        print(f"Left:{left} Middle: {middle} Right: {right}")
+
         if citations[middle] > middle+1: # Still within the K-index range
             left = middle + 1
         
@@ -120,21 +122,33 @@ def test_q1():
     A = q1(C)
     assert A == 4, f"Expected: \"4\" got {A} instead..."
 
+    print(f"DONE\n\n")
+
     C = [17, 17, 12, 10, 7, 6, 2, 2, 1, 1, 1]
-    print(C)
-    print(list(range(1,len(C))))
     A = q1(C)
     assert A == 5, f"Expected: \"5\" got {A} instead..."
+
+    print(f"DONE\n\n")
 
     C = [9, 9, 8, 7]
     A = q1(C)
     assert A == 3, f"Expected: \"3\" got {A} instead..."
 
+    print(f"DONE\n\n")
+
     C = [3, 0, 0, 0]
     A = q1(C)
     assert A == 0, f"Expected: \"0\" got {A} instead..."
 
+    print(f"DONE\n\n")
+
     C = [0, 0, 0, 0]
+    A = q1(C)
+    assert A == -1, f"Expected: \"-1\" got {A} instead..."
+
+    print(f"DONE\n\n")
+
+    C = [0]
     A = q1(C)
     assert A == -1, f"Expected: \"-1\" got {A} instead..."
 
@@ -223,6 +237,6 @@ def test_q3():
     print(f"R:{pairs}")
     print(f"I:{result_dict['P']}")
     
-# test_q1()
-test_q2()
+test_q1()
+# test_q2()
 # test_q3()
