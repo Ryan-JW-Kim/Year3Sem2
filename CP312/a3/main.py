@@ -2,6 +2,7 @@ import sys
 
 def q1(citations):
 
+    print(f"Calling H-Index on: {citations}")
     n = len(citations)
 
     left = 0
@@ -11,7 +12,7 @@ def q1(citations):
 
         middle = (left+right) // 2
 
-        print(f"Left:{left} Middle: {middle} Right: {right}")
+        print(f"      Left:{left} Middle: {middle} Right: {right}")
 
         if citations[middle] > middle+1: # Still within the K-index range
             left = middle + 1
@@ -152,7 +153,7 @@ def test_q1():
     A = q1(C)
     assert A == -1, f"Expected: \"-1\" got {A} instead..."
 
-    print('Well done... Q1 completed')
+    print('\nWell done... Q1 completed')
 
 def test_q2():
 
