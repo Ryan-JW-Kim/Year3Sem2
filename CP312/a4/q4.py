@@ -1,9 +1,13 @@
 
-def q4():
-    pass
+def q4(string):
+    return "1"
 
 def test_q4():
-    pass
+    
+    test_sequence = "abeba"
+    real = "abeba"
+    result = q4(test_sequence)
+    assert len(real) == len(result), f"Expected: {real} ({len(real)}) Got: {result} ({len(result)})"
 
-def q4_brute_force_check_optimal():
-    pass
+
+test_q4()
