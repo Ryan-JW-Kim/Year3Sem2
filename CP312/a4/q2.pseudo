@@ -1,0 +1,26 @@
+def MinWeightChange(coins, weights, Target):
+
+    optimal_solutions = []
+
+    for i=1 to Target do
+        optimal_solutions.append(0)
+    end
+
+    for i=1 to n do
+        for j=Target to 1 do
+
+            current_solution = optimal_solutions[j]
+
+            if coins[i] <= j do
+                numb_coins = floor(j/coins[i])
+
+                potential_solution = optimal_solutions[j - (coins[i] * numb_coins)] + weights[i] * numb_coins
+
+                if potential_solution < current_solution or current_solution == 0 do
+                    optimal_solutions[j] = potential_solution
+                end
+            end
+        end
+    end
+
+    return optimal_solutions[Target]

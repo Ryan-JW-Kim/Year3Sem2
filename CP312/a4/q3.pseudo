@@ -1,0 +1,47 @@
+def Question_3(array):
+
+    left = 0
+    right = n
+
+    while left <= right do
+
+        middle = floor((left + right) / 2)
+
+        if middle - 1 < 0 do
+            return array[middle]
+        end
+
+        else if middle + 1 >= n do
+            return array[middle]
+        end
+
+        l = array[middle-1]
+        c = array[middle]
+        r = array[middle + 1]
+
+        if l == c do
+            if middle % 2 == 0 do
+                right = middle - 1
+            end
+
+            else do
+                left = middle + 1
+            end
+        end
+
+        else if c == r do
+            if middle % 2 == 0 do
+                left = middle + 1
+            end
+
+            else do
+                right = middle - 1
+            end
+        end
+
+        else do
+            return c
+        end
+    end
+
+    return array[middle]
