@@ -33,30 +33,49 @@ def test_q2():
     result = q2(coins, weights, target_value)
     assert result == optimal_weight, f"C: {coins}\nW: {weights}    Target: {target_value}\nExpected {optimal_weight} got {result}\n\n"
 
-def q2_brute_force_check_optimal():
-    pass
+    for i in range(1, 100):
 
-def q2_brute_force_disprove_optimal():
+        for w1 in range(2, 50):
+            for w2 in range(2, 50):
+                for w3 in range(2, 50):
 
-    coin_values = [1, 2, 5]
-    target = 24
+                    g = greedy(coins, [w1, w2, w3], i)
+                    result = q2(coins, [w1, w2, w3], i)
 
-    from itertools import permutations
-    permu_weights = list(permutations(list(range(1, 100)), 3))
+                    if result != g:
+                        print(f"T:{i}   {[w1, w2, w3]} gave {g}    expected {result}")
+                    
+                    # import sys
+                    # sys.exit()
 
-    for peru in permu_weights:
-        weights = list(permu)
+def greedy(coins, weights, target):
+     
+    ratios = []
+    all_data = []
 
-        ratios = {}
+    for i in range(len(coins)):    
+        all_data.append({"C": coins[i], "W": weights[i], "R": coins[i]/weights[i]})
+        ratios.append(all_data[-1]["R"])
 
-        for i in range(len(coin_values)):
-            ratios[coin_values[i] / weights[i]] = [coin_values[i], weights[i]]
+    ratios.sort(reverse=True)
 
-        keys = list(ratios.keys())
-        keys.sort(reverse=True)
+    weight = 0
 
-        # result = {}
-        # for key in keys:
+    for r in ratios:
+        for data in all_data:
+            if data["R"] == r:
 
+                # Use
+                k = target // data["C"]
+                weight += data["W"] * k
+                target -= data["C"] * k
+
+                data["R"] = -1
+
+                break
+
+    return weight
 
 test_q2()
+
+
