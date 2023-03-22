@@ -1,34 +1,39 @@
 
-def q4(string):
+def q4(s):
     
-    string2 = str(list(string)[::-1])
-    n = len(string)
-    m = n
+    r = ""
+    for i in range(len(s)):
+        i = len(s) - i - 1
+        r += s[i]
 
-    C = []
+    n = len(s)
+    P = [[0 for _ in range(len(s))] for __ in range(len(s))]
 
+    if s == r:
+        return len(s)
+    
     for i in range(n):
-        C.append([])
-
         for j in range(n):
-            C[i].append(0)
+            if s[i] == r[j]:
 
-    for i in range(n):
-        for j in range(n):
-            if string[i] == string2[j]:
-                C[i][j] = C[i-1][j-1] + 1
+                if i != 0 and j != 0:
+                    P[i][j] = P[i-1][j-1] + 1
+
+                else:
+                    P[i][j] = 1
 
             else:
-                C[i][j] = max(C[i-1][j], C[i][j-1])
+
+                P[i][j] = max(P[i-1][j] if i != 0 else 0, P[i][j-1] if j != 0 else 0)
     
-    return C[n-1][n-1]
+    return P[n-1][n-1]
 
 def test_q4():
     
     test_sequence = "strabetubsa"
     real = "abeba"
     result = q4(test_sequence)
-    assert len(real) == len(result), f"Expected: {real} ({len(real)}) Got: {result} ({len(result)})"
+    assert len(real) == result, f"Expected: {real} ({len(real)}) Got: {result} ({result})"
 
 
 test_q4()
