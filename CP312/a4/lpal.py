@@ -57,7 +57,7 @@ def dp_palindrome(X):
         
     return LCS_palindrome
 
-def main(input_string: str):
+def main():
 
     user_input = input("")
     inputs = []

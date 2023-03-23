@@ -33,20 +33,20 @@ def test_q2():
     result = q2(coins, weights, target_value)
     assert result == optimal_weight, f"C: {coins}\nW: {weights}    Target: {target_value}\nExpected {optimal_weight} got {result}\n\n"
 
-    for i in range(1, 100):
+    coins = [1]
+    weights = [40]
+    target_value = 3
+    optimal_weight = 120
+    result = q2(coins, weights, target_value)
+    assert result == optimal_weight, f"C: {coins}\nW: {weights}    Target: {target_value}\nExpected {optimal_weight} got {result}\n\n"
 
-        for w1 in range(2, 50):
-            for w2 in range(2, 50):
-                for w3 in range(2, 50):
+    coins = []
+    weights = []
+    target_value = 0
+    optimal_weight = 0
+    result = q2(coins, weights, target_value)
+    assert result == optimal_weight, f"C: {coins}\nW: {weights}    Target: {target_value}\nExpected {optimal_weight} got {result}\n\n"
 
-                    g = greedy(coins, [w1, w2, w3], i)
-                    result = q2(coins, [w1, w2, w3], i)
-
-                    if result != g:
-                        print(f"T:{i}   {[w1, w2, w3]} gave {g}    expected {result}")
-                    
-                    # import sys
-                    # sys.exit()
 
 def greedy(coins, weights, target):
      
