@@ -1,0 +1,81 @@
+def dpPalindrome(X):
+
+    // Create reversed X
+    Y = X[::-1]
+
+    // base cases for matrix
+    C = []
+    for i=0 to n+1 do
+        C.append([])
+        for j=0 to n+1 do
+            C[i].append(0)
+        end
+    end
+
+    // base cases for backpointer matrix
+    D = []
+    for i=0 to n+1 do
+        M.append([])
+        for j=0 to n+1 do
+            M[i].append(0)
+        end
+    end
+
+    if X == Y do
+        return X
+    end
+
+    if X == "" do
+        return ""
+    end
+
+    for i=1 to n+1 do
+        for j=1 to n+1 do
+
+            // Adjust columns to align with proper indices
+            ii = i-1
+            jj = j-1
+
+            if Y[ii] == X[jj] do
+                C[i][j] = C[i-1][j-1] + 1
+                D[i][j] = "up-left"
+            end
+
+            else do
+                m = max(C[i-1][j], C[i][j-1])
+
+                if m == C[i-1][j] do
+                    C[i][j] = C[i-1][j]
+                    D[i][j] = "up"
+                end
+                
+                else if m = C[i][j-1] do
+                    C[i][j] = C[i][j-1]
+                    D[i][j] = "left"
+                end
+            end
+        end
+    end
+
+    row = n
+    column = n
+    palindrome = ""
+
+    while row > 0 and column > 0 do
+
+        if D[row][column] == "up-left" do
+            palindrome = palindrome + Y[row-1]
+            row = row - 1
+            columm = columm - 1
+        end
+
+        else if D[row][columm] == "up" do
+            row = row - 1
+        end
+
+        else if D[row][columm] == "left" do
+            column -= 1
+        end
+    end
+
+    return palindrome

@@ -1,0 +1,27 @@
+def MakingTheDeadline(d):
+
+    // Sorted by increasing deadline times
+    d.sort()
+
+    time = 0
+    delayed = []
+
+    for i=1 to n do
+
+        // If current task is overdue
+        if d[i] < time do
+            //Complete task, and increment time
+            time += 1
+        end
+
+        else do
+            // Task is overdue, therefore just delay it and move to next
+            delayed.append(d[i])
+        end
+    end
+
+    m = len(delayed)
+
+    for i=1 to m do
+        // Complete already overdue tasks
+    end
