@@ -1,4 +1,3 @@
-from Utils import text
 from student import *
 from staff import *
 from display import *
@@ -8,27 +7,25 @@ from db_manager import *
 
 def main():
 
-    print(text["First line"])
-    cmd = input(text["Input Prompt"])
-    
-    while cmd not in text["Exit Command"]:
-        
-        if cmd in text["Student Command"]:
-            Student.perform_command(cmd)
+    # Introduct Program
+    msg = "Hello intro"
+    print(msg)
 
-        elif cmd in text["Staff Command"]:
-            Staff.perform_command(cmd)
+    # Prompt for input
+    msg = "Explanatio and input routes"
+    cmd = input(msg)
 
-        elif cmd in text["Display Command"]:
-            Display.perform_command(cmd)
+    # While loop for new inputs untill break character
+    while cmd = 
 
-        elif cmd in text["Help Command"]:
-            Help.print_help()
+        # Which base command
 
-        else:
-            Help.print_invalid_command()
+            # Go into related object complete cmd
 
-        cmd = input(text["Input Prompt"])
+        # Not known command
+
+            # Report issue to user
+
 
 if __name__ == "__main__":
     main()

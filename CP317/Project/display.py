@@ -1,26 +1,29 @@
 
 class Display:
-    
-    @staticmethod
-    def perform_command(cmd):
-        if cmd == "display":
-            Display.display()
-        
+    valid_usertype = ["Staff", "Student"]
 
-class Help
     @staticmethod
-    def print_help():
-        msg = """
-        Welcome to the Library Management System...
-        Below are the commands you can use and the order in which they can be used:
-        1. \"add\" - add a new book, student or staff member
-        2. \"delete\" - delete a book, student or staff member
-        3. \"edit\" - edit a book, student or staff member
-        4. \"search\" - search for a book, student or staff member
-        5. \"reserve\" - reserve a book
-        """
-        print(msg)
-    
+    def help():
+        pass
+
     @staticmethod
-    def print_invalid_command():
-        print("Invalid command")
+    def present_query(data, usertype="Student"):
+        
+        if usertype not in Display.valid_usertype:
+            raise ValueError("Invalid usertype for presentation")
+        
+        if usertype == "Staff":
+            
+            if data["type"] == "Book Info":
+                pass
+            
+            else:
+                pass
+            
+        elif usertype == "Student":
+            
+            if data["type"] == "Book Info":
+                pass
+
+            else:
+                pass

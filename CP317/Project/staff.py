@@ -1,32 +1,25 @@
 from Utils import text
+from db_manager import *
+from display import *
+
 class Staff:
-    
+
     @staticmethod
-    def perform_command(cmd):
-        if cmd == "add":
-            Staff.add_command()
-        elif cmd == "delete":
-            Staff.delete_staff()
-        elif cmd == "edit":
-            Staff.edit_staff()
-        elif cmd == "search":
-            Staff.search()
+    def checkout_book_id(id: int):
+        query = ""
+
+        # Create Query for certain book via input()
+
+        result = Database.execute_query(query)
+        Display.present_query(result, usertype="Staff")
+
+
+    @staticmethod
+    def get_user_info_id(id: int):
         
-    @staticmethod
-    def add_command():
+        query = ""
 
-        print("What would you like to add? (book, student, staff)")
+        # Create query for certain user via input()
 
-        cmd = text["Input Prompt"]
-
-        if cmd == "book":
-            book_data = {}
-            pass
-
-        elif cmd == "student":
-            student_data = {}
-            pass
-
-        elif cmd == "staff":
-            staff_data = {}
-            pass
+        result = Database.execute_query(query)
+        Display.present_query(result, usertype="Staff")
