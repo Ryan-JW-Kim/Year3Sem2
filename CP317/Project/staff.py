@@ -1,25 +1,26 @@
-from display import *
 from user import User
 
 class Staff(User):
-    def __init__(self):
-        super(Staff, self).__init__()
+    def __init__(self, db_interface):
+        super(Staff, self).__init__(db_interface)
         
-        self.available_commands = ["Add", "Delete", "Update", "Search", "Checkout", "Help"]
-        self.type = "Staff"
+        self.available_commands = ["add", "delete", "update", "search", "checkout", "help"]
+        self.type = "staff"
+        self.db_interface = db_interface
 
-
-    def do(self, cmd:str):
+    def do(self):
         
-        if cmd == "Add":
+        if self.cmd == "add":
             self.db_interface.add_book(self)
-        elif cmd == "Delete":
+        elif self.cmd == "delete":
             self.db_interface.delete(self)
-        elif cmd == "Update":
+        elif self.cmd == "update":
             self.db_interface.update(self)
-        elif cmd == "Search":
+        elif self.cmd == "search":
             self.db_interface.search(self)
-        elif cmd == "Checkout":
+        elif self.cmd == "checkout":
             self.db_interface.checkout(self)
-        elif cmd == "Help":
-            Display.help()
+        elif self.cmd == "help":
+            self.db_interface.display.help()
+
+        self.has_no_command = True

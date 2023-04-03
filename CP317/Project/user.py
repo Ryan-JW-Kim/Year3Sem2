@@ -1,9 +1,6 @@
-from db_manager import Database
-from display import Display
-
 class User:    
-    def __init__(self):
-        self.db_interface = Database
+    def __init__(self, db_interface):
+        self.db_interface = db_interface
         self.available_commands = []
         self.cmd = None
         self.type = "Super User"
@@ -22,14 +19,14 @@ class User:
             cmds += f"\n   - {cmd}"
         cmds += "\n\nEnter a command: "
         temp = input(cmds)
-        self.run_loop = True if temp not in Display.exit_commands else False
+        self.run_loop = True if temp not in self.db_interface.display.exit_commands else False
 
         while self.run_loop:
 
             if not self.is_valid_cmd(temp):
                 print("Invalid command. Please try again.")
                 temp = input(cmds)
-                self.run_loop = True if temp not in Display.exit_commands else False
+                self.run_loop = True if temp not in self.db_interface.display.exit_commands else False
 
             else:
                 self.cmd = temp

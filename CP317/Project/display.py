@@ -7,7 +7,7 @@ class Display:
     exit_commands = ["quit", "exit"]
 
     @staticmethod
-    def prompt_user_type():
+    def prompt_user_type(db_interface):
 
         prompt = "Are you a \"student\" or \"staff\" member? "
 
@@ -23,10 +23,10 @@ class Display:
                 break
 
         if user_type == "student":
-            return Student()
+            return Student(db_interface)
         
         elif user_type == "staff":
-            return Staff()
+            return Staff(db_interface)
         
     @staticmethod
     def prompt_for_query(find: str, valid: type, query: str = ""):
@@ -47,3 +47,8 @@ class Display:
         query += f"WHERE {find} = {temp}"
 
         return query
+    
+    @staticmethod
+    def help():
+        print("Help")
+        return True

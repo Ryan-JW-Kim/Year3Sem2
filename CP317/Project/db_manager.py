@@ -27,6 +27,7 @@ user
 
 class Database:
     active_connector = None
+    display = Display
 
     def __init__(self, user_type: str):
         
@@ -49,7 +50,7 @@ class Database:
                        "Checkout Book": ["staff"],
                        "Search Book": ["student", "staff"]}
         
-        return True if origin.user_type in authorities[cmd] else False
+        return True if origin.type in authorities[cmd] else False
 
     @staticmethod
     def execute_query(query: str):
@@ -97,6 +98,8 @@ class Database:
     def add_book(origin):
         if Database.user_has_authority(origin, "Add Book") is False:
             return False
+        
+        print("adding")
         query = ""
         return False
     

@@ -1,7 +1,5 @@
-from student import *
-from staff import *
-from display import *
-from db_manager import *
+from display import Display
+from db_manager import Database
 
 
 def main():
@@ -11,7 +9,7 @@ def main():
     print(msg)
 
     # Select user type
-    user = Display.prompt_user_type()
+    user = Display.prompt_user_type(Database)
 
     # Prompt for input
     user.prompt_command()
@@ -26,14 +24,16 @@ def main():
         # Complete stored command
         user.do()
 
-    
 def test_main():
     
-    user = Staff()
-
+    user = Display.prompt_user_type(Database)
     user.prompt_command()
-
-    print(user.available_commands)
+    
+    while user.run_loop:
+        while user.has_no_command:
+            user.prompt_command()
+        user.do()
+        
 
 if __name__ == "__main__":
 
