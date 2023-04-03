@@ -1,7 +1,6 @@
 from student import *
 from staff import *
 from display import *
-from report import *
 from db_manager import *
 
 
@@ -11,21 +10,38 @@ def main():
     msg = "Hello intro"
     print(msg)
 
+    # Select user type
+    user = Student
+    msg = "Select user type"
+    temp = input(msg)
+
+    Database(user)
+
+    if False:
+        Database.initilize_database_file()
+        Database.fill_database_test()
+
+    # while is not valid user type
+    while not Database.valid_user_type(temp):
+        break
+        # Prompt for user type
+    
+    user = Database.set_user(temp)
+    
     # Prompt for input
-    msg = "Explanatio and input routes"
+    msg = user.available_commands()
     cmd = input(msg)
 
-    # While loop for new inputs untill break character
-    while cmd = 
+    while user.is_valid_cmd(cmd):
+        pass
+        # Inform user of valid commands
 
-        # Which base command
+        # Prompt for input
 
-            # Go into related object complete cmd
+        # Execute command, break, or pass
 
-        # Not known command
-
-            # Report issue to user
-
+    Database.close_database_file()
 
 if __name__ == "__main__":
+
     main()
