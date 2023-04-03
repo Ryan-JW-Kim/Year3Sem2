@@ -68,3 +68,5 @@ def main():
     for string in inputs:
         print(dp_palindrome(string))
 
+
+main()
