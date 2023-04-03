@@ -1,18 +1,31 @@
 import mysql.connector
+from display import Display
 
+"""
+books
+ - id (unique id of book)
+ - title (title of book)
+ - author (author of book)
+ - year (year of publication)
+ - quantity (number of copies of book)                |
+ - reserved (number of copies of book reserved)       |
+ - taken_copies (number of copies of book taken out)  | -> all four are related values.... quantity = reserved + taken_copies + available
+ - available (number of copies of book available)     |
 
-class Book:
-    def __init__(self, id: int, name: str, author: str, year: int, available: bool):
-        self.id = id
-        self.name = name
-        self.author = author
-        self.year = year
-        self.available = available
+user
+ - id (unique id of user)
+ - name (name of user)
+ - type (student or staff)
+ - books (list of books checked out by user)
+ - reserved (list of books reserved by user)
+ - overdue (list of books overdue by user)
+ - fines (total amount of fines owed by user)                              |
+ - max_fines (max amount of fines owed by user)                            | -> all three are related values.... not allowed if fines >= max_fines
+ - is_allowed (boolean indicating if user is allowed to check out books)   |
 
+"""
 
 class Database:
-    valid_book_fields = ["id", "name", "author", "year", "available"]
-
     active_connector = None
 
     def __init__(self, user_type: str):
@@ -23,82 +36,73 @@ class Database:
         user = "root"
         password = "password"
 
-        Database.active_connector = mysql.connector(host=host, user=user, password=password, database="library")
+        Database.active_connector = mysql.connector.connect(host=host, user=user, password=password, database="library")
 
     @staticmethod
-    def get_books(search_params: list):
-        # Prompt for valid parameters
-        msg = "Enter search parameter (author, genre, year)"
-
-        prompt = ""
-        cmd = input(prompt)
-
-        # Create query for certain book via input()
-
-        # Execute query
-        query = ""
-
-        result = Book.execute_query(query)
-        return result
-
-    @staticmethod
-    def get_book(find_from: str):
-        if find_from not in Database.valid_book_fields:
-            raise ValueError("Invalid field for book search")
+    def user_has_authority(origin, cmd: str):
         
-        pass
-
-    @staticmethod
-    def reserve_book(find_from: str):
-        if find_from not in Database.valid_book_fields:
-            raise ValueError("Invalid field for book search")
+        authorities = {"Get Books": ["student", "staff"],
+                       "Add Book": ["staff"],
+                       "Delete Book": ["staff"],
+                       "Update Book": ["staff"],
+                       "Reserve Book": ["student", "staff"],
+                       "Checkout Book": ["staff"],
+                       "Search Book": ["student", "staff"]}
         
-        pass
+        return True if origin.user_type in authorities[cmd] else False
 
     @staticmethod
     def execute_query(query: str):
-        pass
+        mycursor = Database.active_connector.cursor()
+        mycursor.execute(query)
+        return True
 
     @staticmethod
     def valid_user_type(user_type: str):
-        pass
-
-    @staticmethod
-    def set_user(user_type: str):
-        pass
-
-    @staticmethod
-    def initilize_database_file():
-        if Database.active_connector is None:
-            raise ValueError("No active connector")
         
-        mycursor = Database.active_connector.cursor()
-
-        mycursor.execute("CREATE DATABASE library")
-
-        # Double check if tables are right
-        mycursor.execute("CREATE TABLE books (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), author VARCHAR(255), year INT, available BOOLEAN)")        
-        mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), password VARCHAR(255), type VARCHAR(255))")
-        mycursor.execute("CREATE TABLE reservations (id INT AUTO_INCREMENT PRIMARY KEY, book_id INT, user_id INT, FOREIGN KEY (book_id) REFERENCES books(id), FOREIGN KEY (user_id) REFERENCES users(id))")
-
+        if user_type not in ["student", "staff"]:
+            return False
+        
+        return True
 
     @staticmethod
-    def close_database_file():
-        if Database.active_connector is None:
-            raise ValueError("No active connector")
+    def get_books(origin):
+
+        if Database.user_has_authority(origin, "Get Books") is False:
+            return False
         
-        Database.active_connector.close()
+        params = [{"Display Name": "Book ID", 
+                   "Type": int}]
+
+        query_template = "SELECT * FROM books WHERE id = %s" 
+        query = Display.prompt_for_query(params, query_template)
+
+        Database.execute_query(query)
+
+        return True
     
     @staticmethod
-    def fill_database_test():
-        if Database.active_connector is None:
-            raise ValueError("No active connector")
-        
-        # Create test data as dict
+    def search_book(origin):
+        if Database.user_has_authority(origin, "Search Book") is False:
+            return False
+        query = ""
+    
+    @staticmethod
+    def reserve_book(origin):
+        if Database.user_has_authority(origin, "Reserve Book") is False:
+            return False
+        query = ""
 
-        # Create test users as dict
-
-        # Create test reservations as dict
-
-        # Add test data to database
-
+    @staticmethod
+    def add_book(origin):
+        if Database.user_has_authority(origin, "Add Book") is False:
+            return False
+        query = ""
+        return False
+    
+    @staticmethod
+    def add_user(origin):
+        if Database.user_has_authority(origin, "Add User") is False:
+            return False
+        query = ""
+        return False

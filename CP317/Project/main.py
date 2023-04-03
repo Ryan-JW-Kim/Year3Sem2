@@ -7,41 +7,34 @@ from db_manager import *
 def main():
 
     # Introduct Program
-    msg = "Hello intro"
+    msg = "Welcome to the Library Management System..."
     print(msg)
 
     # Select user type
-    user = Student
-    msg = "Select user type"
-    temp = input(msg)
+    user = Display.prompt_user_type()
 
-    Database(user)
-
-    if False:
-        Database.initilize_database_file()
-        Database.fill_database_test()
-
-    # while is not valid user type
-    while not Database.valid_user_type(temp):
-        break
-        # Prompt for user type
-    
-    user = Database.set_user(temp)
-    
     # Prompt for input
-    msg = user.available_commands()
-    cmd = input(msg)
+    user.prompt_command()
 
-    while user.is_valid_cmd(cmd):
-        pass
-        # Inform user of valid commands
+    # While the user indicates the loop should run
+    while user.run_loop:
+        
+        # While the user has failed to provide a valid command (and has not quit)
+        while user.has_no_command:
+            user.prompt_command()
 
-        # Prompt for input
+        # Complete stored command
+        user.do()
 
-        # Execute command, break, or pass
+    
+def test_main():
+    
+    user = Staff()
 
-    Database.close_database_file()
+    user.prompt_command()
+
+    print(user.available_commands)
 
 if __name__ == "__main__":
 
-    main()
+    test_main()

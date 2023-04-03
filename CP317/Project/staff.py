@@ -1,50 +1,25 @@
-from db_manager import *
 from display import *
+from user import User
 
-class Staff:
-
-    db_interface = Database
-
-    @staticmethod
-    def checkout_book_id(id: int):
-
-        # Prompt for book id
-
-        # is valid book id
-
-        # is book available
-
-        # is user allowed to checkout
-
-        # checkout book
-
-        query = ""
-        # Create Query for certain book via input()
-
-        result = Staff.db_interface.execute_query(query)
-        Display.present_query(result, usertype="Staff")
-
-
-    @staticmethod
-    def get_user_info_id(id: int):
+class Staff(User):
+    def __init__(self):
+        super(Staff, self).__init__()
         
-        # Prompt for user id
+        self.available_commands = ["Add", "Delete", "Update", "Search", "Checkout", "Help"]
+        self.type = "Staff"
 
-        # is valid user id
 
-        # get user info
-
-        query = ""
-
-        # Create query for certain user via input()
-
-        result = Staff.db_interface.execute_query(query)
-        Display.present_query(result, usertype="Staff")
-
-    @staticmethod
-    def is_valid_cmd(cmd: str):
-        pass
-
-    @staticmethod
-    def available_commands():
-        pass
+    def do(self, cmd:str):
+        
+        if cmd == "Add":
+            self.db_interface.add_book(self)
+        elif cmd == "Delete":
+            self.db_interface.delete(self)
+        elif cmd == "Update":
+            self.db_interface.update(self)
+        elif cmd == "Search":
+            self.db_interface.search(self)
+        elif cmd == "Checkout":
+            self.db_interface.checkout(self)
+        elif cmd == "Help":
+            Display.help()
