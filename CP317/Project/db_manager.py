@@ -42,13 +42,11 @@ class Database:
     @staticmethod
     def user_has_authority(origin, cmd: str):
         
-        authorities = {"Get Books": ["student", "staff"],
+        authorities = {"Get Book": ["student", "staff"],
                        "Add Book": ["staff"],
                        "Delete Book": ["staff"],
-                       "Update Book": ["staff"],
                        "Reserve Book": ["student", "staff"],
-                       "Checkout Book": ["staff"],
-                       "Search Book": ["student", "staff"]}
+                       "Checkout Book": ["staff"]}
         
         return True if origin.type in authorities[cmd] else False
 
@@ -74,7 +72,7 @@ class Database:
         if Database.user_has_authority(origin, "Get Books") is False:
             return False
         
-        params = [{"Display Name": "id",
+        params = [{"Display Name": "ID",
                    "Type": "Number"}]
 
         query_template = "SELECT * FROM books WHERE id=%s" 
@@ -85,12 +83,6 @@ class Database:
             return True
 
         return False
-    
-    @staticmethod
-    def search_book(origin):
-        if Database.user_has_authority(origin, "Search Book") is False:
-            return False
-        query = ""
     
     @staticmethod
     def reserve_book(origin):

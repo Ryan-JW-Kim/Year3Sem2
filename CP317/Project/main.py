@@ -24,19 +24,6 @@ def main():
         # Complete stored command
         user.do()
 
-def test_main():
-    
-    user = Display.prompt_user_type(Database)
-    user.prompt_command()
-    
-    while user.run_loop:
-        while user.has_no_command and user.run_loop:
-            user.prompt_command()
-        
-        if user.has_no_command is False:
-            user.do()
-        
-
 if __name__ == "__main__":
 
-    test_main()
+    main()
