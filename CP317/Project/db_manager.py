@@ -72,11 +72,12 @@ class Database:
         if Database.user_has_authority(origin, "Get Books") is False:
             return False
         
-        params = [{"Display Name": "Book ID", 
-                   "Type": int}]
+        params = [{"Display Name": "id", 
+                   "Type": "(Number)",
+                   "Action": "Get book"}]
 
         query_template = "SELECT * FROM books WHERE id = %s" 
-        query = Display.prompt_for_query(params, query_template)
+        query = Display.prompt_for_query(params, query_template, origin)
 
         Database.execute_query(query)
 
