@@ -54,9 +54,11 @@ class Database:
 
     @staticmethod
     def execute_query(query: str):
-        mycursor = Database.active_connector.cursor()
-        mycursor.execute(query)
-        return True
+        # mycursor = Database.active_connector.cursor()
+        # mycursor.execute(query)
+        # return True
+
+        print(f"\n    Executing query: {query}\n")
 
     @staticmethod
     def valid_user_type(user_type: str):
@@ -72,16 +74,17 @@ class Database:
         if Database.user_has_authority(origin, "Get Books") is False:
             return False
         
-        params = [{"Display Name": "id", 
-                   "Type": "(Number)",
-                   "Action": "Get book"}]
+        params = [{"Display Name": "id",
+                   "Type": "Number"}]
 
-        query_template = "SELECT * FROM books WHERE id = %s" 
-        query = Display.prompt_for_query(params, query_template, origin)
+        query_template = "SELECT * FROM books WHERE id=%s" 
+        query = Display.prompt_for_query(params, origin, query_template)
 
-        Database.execute_query(query)
+        if query:
+            Database.execute_query(query)
+            return True
 
-        return True
+        return False
     
     @staticmethod
     def search_book(origin):

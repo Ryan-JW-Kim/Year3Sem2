@@ -17,7 +17,7 @@ class User:
         cmds = f"Choose from the following commands:"
         for cmd in self.available_commands:
             cmds += f"\n   - {cmd}"
-        cmds += "\n\nEnter a command: "
+        cmds += "\nEnter a command: "
         temp = input(cmds)
         self.run_loop = True if temp not in self.db_interface.display.exit_commands else False
 
@@ -32,8 +32,6 @@ class User:
                 self.cmd = temp
                 self.has_no_command = False
                 break
-
-        print("\n")
         
         return temp
 

@@ -9,18 +9,19 @@ class Display:
     @staticmethod
     def prompt_user_type(db_interface):
 
-        prompt = "Are you a \"student\" or \"staff\" member? "
-
+        prompt = "\nAre you a \"student\" or \"staff\" member: "
         user_type = input(prompt)
 
         while user_type not in Display.exit_commands:
 
-            if user_type not in Display.valid_user_types:
+            if user_type not in Display.valid_user_types or user_type in Display.exit_commands:
                 print("Invalid user type. Please try again.")
                 user_type = input(prompt)
 
             else:
                 break
+        
+        print("\n")
 
         if user_type == "student":
             return Student(db_interface)
@@ -31,36 +32,26 @@ class Display:
     @staticmethod
     def prompt_for_query(params: dict, origin, query):
 
-        # list of valid user inputs
-        valid = [param["Display Name"] for param in params]
+        expect = query.count("%s")    
 
-        # What to input will be used for
-        action = params[0]["Action"]
-        prompt = f"Select one of the following fields to use when performing \"{action}\":\n"
-        
-        # For each possible field, display it to the user
+        if expect != len(params):
+            print("Error: parameter mismatch.")
+            return False
+    
+        print(f"Please enter values for command: ")
+
+        values = []
         for param in params:
-            name = param["Display Name"]
-            prompt += f"   - {name}\n"
-
-        # Prompt the user for type input
-        while origin.run_loop:
-            temp = input(prompt)
+            temp = input(f"  - {param['Display Name']} ({param['Type']}): ")
+            
             origin.run_loop = True if temp not in origin.db_interface.display.exit_commands else False
+            
+            if origin.run_loop is False:
+                return False
 
-            if temp not in valid:
-                print("Invalid input. Please try again.")
-                prompt = f"Select one of the following fields {valid}: "
+            values.append(temp)
 
-        # Prompt the user for value input
-        while origin.run_loop:
-            valid_type = "Number"
-            temp = input(f"Enter the value for \"{temp}\" should be a {valid_type}: ")
-            origin.run_loop = True if temp not in origin.db_interface.display.exit_commands else False
-
-        query += f"WHERE {find} = {temp}"
-
-        return query
+        return query % tuple(values)
     
     @staticmethod
     def help():

@@ -30,9 +30,11 @@ def test_main():
     user.prompt_command()
     
     while user.run_loop:
-        while user.has_no_command:
+        while user.has_no_command and user.run_loop:
             user.prompt_command()
-        user.do()
+        
+        if user.has_no_command is False:
+            user.do()
         
 
 if __name__ == "__main__":
