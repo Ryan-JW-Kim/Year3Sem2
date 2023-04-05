@@ -30,7 +30,7 @@ class Display:
             return Staff(db_interface)
         
     @staticmethod
-    def prompt_for_query(params: dict, origin, query):
+    def prompt_for_query(params: dict, origin, query, assemble=True):
 
         expect = query.count("%s")    
 
@@ -51,7 +51,8 @@ class Display:
 
             values.append(temp)
 
-        return query % tuple(values)
+
+        return query % tuple(values) if assemble else values
     
     @staticmethod
     def help():
