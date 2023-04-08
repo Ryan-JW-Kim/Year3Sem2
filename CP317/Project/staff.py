@@ -4,7 +4,7 @@ class Staff(User):
     def __init__(self, db_interface):
         super(Staff, self).__init__(db_interface)
         
-        self.available_commands = ["Get Book", "Reserve Book", "Add Book", "Delete Book", "Checkout Book", "Help"]
+        self.available_commands = ["Get Book", "Reserve Book", "Add Book", "Delete Book", "Checkout Book","Help"]
         self.type = "staff"
         self.db_interface = db_interface
 
@@ -24,5 +24,8 @@ class Staff(User):
 
         elif self.cmd == "Get Book":
             self.db_interface.get_book(self)
+
+        elif self.cmd == "Delete Book":
+            self.db_interface.delete_book(self)
 
         self.has_no_command = True

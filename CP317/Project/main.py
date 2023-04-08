@@ -30,18 +30,5 @@ def main():
             if user.run_loop:
                 user.do()
 
-def test_db():
-
-    from staff import Staff
-
-    user = Staff(Database)
-
-    user.has_no_command = False
-    user.cmd = "Add Book"
-    user.do()
-
-
 if __name__ == "__main__":
-
     main()
-    # test_db()

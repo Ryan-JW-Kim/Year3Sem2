@@ -30,13 +30,13 @@ class Display:
             return Staff(db_interface)
         
     @staticmethod
-    def prompt_for_query(params: dict, origin, query, assemble=True):
+    def prompt_for_query(params: dict, origin, query="", assemble=True):
 
-        expect = query.count("%s")    
-
-        if expect != len(params):
-            print("Error: parameter mismatch.")
-            return False
+        if assemble and query != "":
+            expect = query.count("%s")    
+            if expect != len(params):
+                print("Error: parameter mismatch.")
+                return False
     
         print(f"Please enter values for command: ")
 
@@ -54,6 +54,11 @@ class Display:
 
         return query % tuple(values) if assemble else values
     
+    @staticmethod
+    def prompt_for_confirmation(msg):
+        print(msg)
+        return input("Are you sure? (y/n): ").lower() == "y"
+
     @staticmethod
     def help():
         print("Presenting to you... a beautiful help menu!")

@@ -1,30 +1,6 @@
 import mysql.connector
 from display import Display
 
-"""
-books
- - id (unique id of book)
- - title (title of book)
- - author (author of book)
- - year (year of publication)
- - quantity (number of copies of book)                |
- - reserved (number of copies of book reserved)       |
- - taken_copies (number of copies of book taken out)  | -> all four are related values.... quantity = reserved + taken_copies + available
- - available (number of copies of book available)     |
-
-user
- - id (unique id of user)
- - name (name of user)
- - type (student or staff)
- - books (list of books checked out by user)
- - reserved (list of books reserved by user)
- - overdue (list of books overdue by user)
- - fines (total amount of fines owed by user)                              |
- - max_fines (max amount of fines owed by user)                            | -> all three are related values.... not allowed if fines >= max_fines
- - is_allowed (boolean indicating if user is allowed to check out books)   |
-
-"""
-
 class Database:
     active_connector = None
     display = Display
@@ -49,12 +25,18 @@ class Database:
         return True if origin.type in authorities[cmd] else False
 
     @staticmethod
-    def execute_query(query, fetch=False):
+    def execute_query(query, fetch=False, val=None):
 
         if type(query) is str:
             print(f"\n    Executing query: {query}\n")
             mycursor = Database.active_connector.cursor()
-            mycursor.execute(query)
+
+            if val is not None:
+                mycursor.execute(query, val)
+            
+            else:
+                mycursor.execute(query)
+
             return mycursor.fetchall() if fetch else True
             print(f"\n    Completed query: {query}\n")
 
@@ -85,14 +67,12 @@ class Database:
         
         book = Database.query_book_info(origin)
 
-        print(f"\n\n{book}\n\n")
+        if not book:
+            return False
 
         print(f"Book exists {book['Title']} by {book['Author']} ({book['Year']}) {book['Available']}, copie(s) available")
 
-        if book:
-            return True
-
-        return False
+        return True
     
     @staticmethod
     def query_book_info(origin, id=None):
@@ -107,12 +87,24 @@ class Database:
             query = Display.prompt_for_query(params, origin, query_template)
 
             if query:
-                temp = list(Database.execute_query(query, fetch=True)[0])
+                temp = Database.execute_query(query, fetch=True)
+                if len(temp) == 0:
+                    print("Book not found")
+                    return False
+                
+                else:
+                    temp = list(temp[0])
+
                 return {"ID": temp[0], "Title": temp[1], "Author": temp[2], "Year": int(temp[3]), "Quantity": int(temp[4]), "Reserved": int(temp[5]), "Taken Copies": int(temp[6]), "Available": int(temp[7])}
                     
         else:
             query = f"SELECT * FROM books WHERE book_id={id}"
-            temp = list(Database.execute_query(query, fetch=True)[0])
+            temp = Database.execute_query(query, fetch=True)
+            if len(temp) == 0:
+                print("Book not found")
+                return False
+            else:
+                temp = list(temp[0])
             return {"ID": temp[0], "Title": temp[1], "Author": temp[2], "Year": int(temp[3]), "Quantity": int(temp[4]), "Reserved": int(temp[5]), "Taken Copies": int(temp[6]), "Available": int(temp[7])}
 
     @staticmethod
@@ -122,7 +114,9 @@ class Database:
             return False
         
         book = Database.query_book_info(origin)
-        print(book)
+        
+        if not book:
+            return False
 
         if book["Available"] > 0:
             
@@ -138,23 +132,24 @@ class Database:
     
         return False
 
-    @staticmethod # DANGER: This function is not safe for production use
+    @staticmethod
     def checkout_book(origin):
 
         if Database.user_has_authority(origin, "Checkout Book") is False:
             return False
         
         book = Database.query_book_info(origin)
-        
-        if book["Available"]:
+        print(book)
+
+        if not book:
+            return False
+
+        if book["Available"] > 0:
             
             # Update status of reservation
-            query_template = f"UPDATE books \nSET reserved=1 \nWHERE id={book['ID']}"
-            Database.execute_query(query_template)
+            query = f"UPDATE books SET taken_copies={book['Taken Copies']+1}, available={book['Available']-1} WHERE book_id={book['ID']}"
 
-            # Update counter for total number of available books
-            query_template = f"UPDATE users \nSET available={book['available']-1} \nWHERE id={origin.id}"
-            Database.execute_query(query_template)
+            Database.execute_query(query)
 
             return True
         
@@ -162,9 +157,9 @@ class Database:
             print(f"Sorry book is not available.")
     
         return False
-
+    
     @staticmethod
-    def add_book(origin):
+    def add_book(origin): 
         if Database.user_has_authority(origin, "Add Book") is False:
             return False
         
@@ -181,13 +176,36 @@ class Database:
         reserved = 0
         taken_copies = 0
         
-        query = f"INSERT INTO books (title, author, year, quantity, available, reserved, taken_copies) VALUES ({values[0]}, {values[1]}, {values[2]}, {values[3]}, {available}, {reserved}, {taken_copies})"
+        query = f"INSERT INTO books (title, author, year, quantity, available, reserved, taken_copies) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        val = (values[0], values[1], values[2], values[3], available, reserved, taken_copies)
         
-        if Database.execute_query(query):
+        if Database.execute_query(query, val=val):
             return True
     
         return False
     
+    @staticmethod
+    def delete_book(origin): 
+        if Database.user_has_authority(origin, "Add Book") is False:
+            return False
+
+        book = Database.query_book_info(origin)
+
+        if not book:
+            return False
+    
+        confirm = Display.prompt_for_confirmation(f"Are you sure you want to remove {book['Title']} by {book['Author']} ({book['Year']})?")
+
+        if confirm is False:
+            return False
+        
+        query = f"DELETE FROM books WHERE book_id={book['ID']}"
+
+        if Database.execute_query(query):
+            return True
+    
+        return False
+
     @staticmethod
     def add_user(origin):
         if Database.user_has_authority(origin, "Add User") is False:
