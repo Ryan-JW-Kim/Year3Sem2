@@ -29,10 +29,7 @@ class Database:
     active_connector = None
     display = Display
 
-    def __init__(self, user_type: str):
-        
-        self.user_type = user_type
-
+    def __init__(self):
         host = "localhost"
         user = "root"
         password = "password"
@@ -52,12 +49,25 @@ class Database:
         return True if origin.type in authorities[cmd] else False
 
     @staticmethod
-    def execute_query(query: str, fetch=False):
-        # mycursor = Database.active_connector.cursor()
-        # mycursor.execute(query)
-        # return mycuros.fetchall() if fetch else True
+    def execute_query(query, fetch=False):
 
-        print(f"\n    Executing query: {query}\n")
+        if type(query) is str:
+            print(f"\n    Executing query: {query}\n")
+            mycursor = Database.active_connector.cursor()
+            mycursor.execute(query)
+            return mycursor.fetchall() if fetch else True
+            print(f"\n    Completed query: {query}\n")
+
+        else:
+            results = []
+            mycursor = Database.active_connector.cursor()
+
+            for q in query:
+                print(f"\n    Executing query: {q}\n")
+                mycursor.execute(q)
+                results.append(mycursor.fetchall() if fetch else True)
+                print(f"\n    Completed query: {q}\n")
+
 
     @staticmethod
     def valid_user_type(user_type: str):
@@ -74,7 +84,11 @@ class Database:
             return False
         
         book = Database.query_book_info(origin)
-        
+
+        print(f"\n\n{book}\n\n")
+
+        print(f"Book exists {book['Title']} by {book['Author']} ({book['Year']}) {book['Available']}, copie(s) available")
+
         if book:
             return True
 
@@ -89,15 +103,17 @@ class Database:
             params = [{"Display Name": "Book ID",
                    "Type": "Number"}]
             
-            query_template = "SELECT * FROM books WHERE id=%s" 
+            query_template = "SELECT * FROM books WHERE book_id=%s" 
             query = Display.prompt_for_query(params, origin, query_template)
 
             if query:
-                return Database.execute_query(query)
+                temp = list(Database.execute_query(query, fetch=True)[0])
+                return {"ID": temp[0], "Title": temp[1], "Author": temp[2], "Year": int(temp[3]), "Quantity": int(temp[4]), "Reserved": int(temp[5]), "Taken Copies": int(temp[6]), "Available": int(temp[7])}
                     
         else:
-            query = f"SELECT * FROM books WHERE id={id}"
-            return Database.execute_query(query)
+            query = f"SELECT * FROM books WHERE book_id={id}"
+            temp = list(Database.execute_query(query, fetch=True)[0])
+            return {"ID": temp[0], "Title": temp[1], "Author": temp[2], "Year": int(temp[3]), "Quantity": int(temp[4]), "Reserved": int(temp[5]), "Taken Copies": int(temp[6]), "Available": int(temp[7])}
 
     @staticmethod
     def reserve_book(origin, id=None):
@@ -106,7 +122,30 @@ class Database:
             return False
         
         book = Database.query_book_info(origin)
+        print(book)
 
+        if book["Available"] > 0:
+            
+            # Update status of reservation
+            query = f"UPDATE books SET reserved={book['Reserved']+1}, available={book['Available']-1} WHERE book_id={book['ID']}"
+
+            Database.execute_query(query)
+
+            return True
+        
+        else:
+            print(f"Sorry book is not available.")
+    
+        return False
+
+    @staticmethod # DANGER: This function is not safe for production use
+    def checkout_book(origin):
+
+        if Database.user_has_authority(origin, "Checkout Book") is False:
+            return False
+        
+        book = Database.query_book_info(origin)
+        
         if book["Available"]:
             
             # Update status of reservation

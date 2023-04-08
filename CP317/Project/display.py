@@ -56,5 +56,4 @@ class Display:
     
     @staticmethod
     def help():
-        print("Help")
-        return True
+        print("Presenting to you... a beautiful help menu!")

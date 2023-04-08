@@ -14,11 +14,12 @@ class User:
 
     def prompt_command(self):
     
-        cmds = f"Choose from the following commands:"
+        cmds = f"\nChoose from the following commands:"
         for cmd in self.available_commands:
             cmds += f"\n   - {cmd}"
         cmds += "\nEnter a command: "
         temp = input(cmds)
+    
         self.run_loop = True if temp not in self.db_interface.display.exit_commands else False
 
         while self.run_loop:
@@ -27,6 +28,7 @@ class User:
                 print("Invalid command. Please try again.")
                 temp = input(cmds)
                 self.run_loop = True if temp not in self.db_interface.display.exit_commands else False
+                self.has_no_command = True
 
             else:
                 self.cmd = temp
