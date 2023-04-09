@@ -26,7 +26,6 @@ def main():
                 user.prompt_command()
 
             # Complete stored command
-
             if user.run_loop:
                 user.do()
 

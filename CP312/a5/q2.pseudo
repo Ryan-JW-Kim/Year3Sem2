@@ -1,0 +1,45 @@
+
+def Connectivity(G):
+    colour_all_vertices_white();
+    sources = []
+    while there is a white vertex s do
+        sources.append(BFS(G, s))
+    end
+
+    if len(sources) == 1 do
+        return "CONNECTED"
+    end
+        
+    new_edges = []
+    prev = None
+    else do
+        for source in sources do
+            if prev is not None do
+                new_edges.append((prev, source))
+            end
+            prev = source
+        end
+        end
+    end     
+
+    return new_edges
+    
+def BFS(G, s):
+    colour s black
+    Q = {s}
+    source = s
+    while Q is not empty do
+        u = Q.pop()
+        for each v in G.adj[u] do
+            if v is white then do
+                colour v gray
+                Q.push(v)
+                // Tree edge
+            end
+            else do
+                // Back edge
+            end
+            end
+        end
+    return source
+end
