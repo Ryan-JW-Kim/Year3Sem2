@@ -3,32 +3,31 @@ from display import Display
 
 class Database:
     active_connector = None
+    user_authorities = {"student": ["Get Book", "Reserve Book"],
+                        "staff": ["Get Book", "Add Book", "Delete Book", "Reserve Book", "Checkout Book"]}
+
     display = Display
 
     def __init__(self):
         host = "localhost"
         user = "root"
         password = "password"
-
+        
         Database.active_connector = mysql.connector.connect(host=host, user=user, password=password, database="library")
 
     @staticmethod
     def user_has_authority(origin, cmd: str):
-        
-        authorities = {"Get Book": ["student", "staff"],
-                       "Add Book": ["staff"],
-                       "Delete Book": ["staff"],
-                       "Reserve Book": ["student", "staff"],
-                       "Checkout Book": ["staff"]}
-        
 
-        return True if origin.type in authorities[cmd] else False
+        if origin.type in Database.user_authorities:
+            return True if cmd in Database.user_authorities[origin.type] else False
+
+        return True if origin.type in Database.user_authorities[cmd] else False
 
     @staticmethod
     def execute_query(query, fetch=False, val=None):
 
         if type(query) is str:
-            print(f"\n    Executing query: {query}\n")
+            print(f"\n    Executing query: {query}")
             mycursor = Database.active_connector.cursor()
 
             if val is not None:
@@ -37,9 +36,10 @@ class Database:
             else:
                 mycursor.execute(query)
 
+            print(f"    Completed query: {query}\n")
+            
             return mycursor.fetchall() if fetch else True
-            print(f"\n    Completed query: {query}\n")
-
+            
         else:
             results = []
             mycursor = Database.active_connector.cursor()
@@ -49,12 +49,11 @@ class Database:
                 mycursor.execute(q)
                 results.append(mycursor.fetchall() if fetch else True)
                 print(f"\n    Completed query: {q}\n")
-
-
-    @staticmethod
-    def valid_user_type(user_type: str):
+            return results
         
-        if user_type not in ["student", "staff"]:
+    @staticmethod
+    def valid_user_type(user_type: str):  
+        if user_type not in Database.user_authorities:
             return False
         
         return True
@@ -70,7 +69,7 @@ class Database:
         if not book:
             return False
 
-        print(f"Book exists {book['Title']} by {book['Author']} ({book['Year']}) {book['Available']}, copie(s) available")
+        print(f"Book Found .... \"{book['Title']}\" by {book['Author']} ({book['Year']}) --- \"{book['Available']}\" copies available.")
 
         return True
     
